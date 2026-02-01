@@ -40,10 +40,10 @@ const NeighbourhoodCell: React.FC<Props> = ({
   const luminance = getPerceivedLuminance(bgColor);
   const isLightBackground = luminance > 0.5;
   const textColor = isLightBackground ? 'text-slate-950' : 'text-white';
-  const mutedTextColor = isLightBackground ? 'text-slate-900/70' : 'text-white/70';
+  const mutedTextColor = isLightBackground ? 'text-slate-900/60' : 'text-white/60';
 
   const containerClasses = `
-    relative w-full aspect-[1/1.25] p-[8%] border border-slate-700/40 
+    relative w-full aspect-[1/1.35] p-[10%] border border-slate-700/40 
     transition-all duration-200 ease-out flex flex-col items-stretch
     will-change-transform transform-gpu group
     [container-type:inline-size]
@@ -69,55 +69,52 @@ const NeighbourhoodCell: React.FC<Props> = ({
       disabled={isStatic}
     >
       {/* 1. Header Row: Population Metrics */}
-      <div className={`flex justify-end items-start text-[8.5cqw] font-black ${textColor} uppercase tracking-tight leading-none h-[15%]`}>
-        <div className="text-right flex flex-col items-end">
-          <span className="whitespace-nowrap">Pop: {neighbourhood.population.toLocaleString()}</span>
-          <span className="whitespace-nowrap">HH: {neighbourhood.households.toLocaleString()}</span>
+      <div className={`flex justify-end items-start text-[9cqw] font-black ${textColor} uppercase tracking-tight leading-tight h-[15%]`}>
+        <div className="text-right flex flex-col items-end opacity-80">
+          <span className="whitespace-nowrap">P: {neighbourhood.population >= 1000 ? (neighbourhood.population/1000).toFixed(1) + 'K' : neighbourhood.population}</span>
+          <span className="whitespace-nowrap">H: {neighbourhood.households >= 1000 ? (neighbourhood.households/1000).toFixed(1) + 'K' : neighbourhood.households}</span>
         </div>
       </div>
 
       {/* 2. Middle Block: Symbol and Name */}
-      <div className="flex-1 flex flex-col justify-center py-[4%]">
-        <div className={`text-[30cqw] font-black ${textColor} leading-none tracking-tighter text-left mb-[1%]`}>
+      <div className="flex-1 flex flex-col justify-center py-[2%]">
+        <div className={`text-[26cqw] font-black ${textColor} leading-none tracking-tighter text-left mb-[2%]`}>
           {neighbourhood.symbol}
         </div>
         
-        {/* Full Ward Name - Revealed on Rollover */}
-        <div className={`text-[7.5cqw] font-bold ${mutedTextColor} uppercase tracking-widest text-left mb-[4%] transition-opacity duration-300 ease-out ${isStatic ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+        {/* Full Ward Name - Revealed on Rollover or always on in mobile contexts (static) */}
+        <div className={`text-[8cqw] font-bold ${mutedTextColor} uppercase tracking-widest text-left mb-[4%] transition-opacity duration-300 ease-out ${isStatic ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
           {neighbourhood.ward}
         </div>
 
-        <div className={`text-[11cqw] font-black ${textColor} leading-[1.1] line-clamp-2 uppercase tracking-tighter text-left`}>
+        <div className={`text-[13.5cqw] font-black ${textColor} leading-[1.05] line-clamp-2 uppercase tracking-tighter text-left`}>
           {neighbourhood.name}
         </div>
       </div>
 
       {/* 3. Footer Block: Affordability and Pricing */}
-      <div className="mt-auto pt-[4%] border-t border-current/10">
+      <div className="mt-auto pt-[6%] border-t border-current/20">
         <div className="flex items-center justify-between relative">
           {/* Left Side: Ratio Group */}
-          <div className="relative">
-            <span className={`text-[18cqw] font-black ${textColor} leading-none`}>
+          <div className="flex flex-col items-start leading-none">
+            <span className={`text-[20cqw] font-black ${textColor}`}>
               {neighbourhood.affordabilityRatio.toFixed(1)}
             </span>
-            {/* Absolute positioning ensures 'Ratio' doesn't affect the vertical centering of the numbers */}
-            <div className={`absolute -bottom-[45%] left-0 text-[7cqw] ${mutedTextColor} font-black uppercase tracking-widest whitespace-nowrap`}>
+            <span className={`text-[8cqw] ${mutedTextColor} font-black uppercase tracking-widest`}>
               Ratio
-            </div>
+            </span>
           </div>
 
-          {/* Right Side: Pricing Stack - Centered against the Ratio Number */}
-          <div className="flex flex-col text-right leading-[1.1] justify-center">
-            <span className={`text-[11cqw] ${textColor} font-bold whitespace-nowrap`}>
-              ${Math.round(neighbourhood.medianIncome / 1000)}K
+          {/* Right Side: Pricing Stack */}
+          <div className="flex flex-col text-right leading-[1.1] justify-center items-end">
+            <span className={`text-[12.5cqw] ${textColor} font-black whitespace-nowrap`}>
+              I:${Math.round(neighbourhood.medianIncome / 1000)}K
             </span>
-            <span className={`text-[11cqw] ${textColor} font-bold whitespace-nowrap`}>
-              ${Math.round(neighbourhood.medianHomePrice / 1000)}K
+            <span className={`text-[12.5cqw] ${textColor} font-black whitespace-nowrap`}>
+              P:${Math.round(neighbourhood.medianHomePrice / 1000)}K
             </span>
           </div>
         </div>
-        {/* Bottom spacer to account for the absolute 'Ratio' label */}
-        <div className="h-[4cqw]"></div>
       </div>
 
       {/* Selection Indicator Dot */}

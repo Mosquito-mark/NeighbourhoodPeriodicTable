@@ -1,0 +1,35 @@
+STRATEGIC DOCUMENTATION: PERIODIC EDMONTON
+
+USER STORY: THE DATA-DRIVEN REPRESENTATIVE
+-------------------------------------------
+As a: Ward City Councilor
+I want to: Instantly visualize the intersection of housing affordability and transit usage across my specific constituency compared to the city-wide average.
+So that: I can advocate for targeted infrastructure investments and social programs that address the unique socio-economic pressures of my residents during budget sessions.
+
+Acceptance Criteria:
+- SYMBOLIC IDENTIFICATION: I can quickly find my ward's neighbourhoods by their 2-letter atomic symbols (e.g., 'Me' for Métis).
+- OUTLIER DETECTION: I can identify "islands" in the grid—neighbourhoods that are highly affordable but car-centric (Top-Left) vs. sustainable but priced out (Bottom-Right).
+- NARRATIVE SUPPORT: I can use the Gemini AI-generated "Investment Verdict" to translate dry statistics into compelling arguments for the Council floor.
+
+
+USE CASE: UC-DEM-001 - IDENTIFYING TRANSIT DESERTS IN AFFORDABLE ZONES
+---------------------------------------------------------------------
+PRIMARY ACTOR: Senior Urban Planner / Public Service Lead
+STAKEHOLDERS: City Councilor, Transit Authority, Housing Department
+
+1. DESCRIPTION:
+A public service employee is tasked with identifying where a new "Express Bus" route should be prioritized. They need to find areas where population density is high, incomes are modest, and current sustainable transit usage is low.
+
+2. PRECONDITIONS:
+- The municipality has uploaded its latest census and real estate CSV data.
+- The Periodic Grid is set to default normalization (Affordability on Y-axis, Sustainability on X-axis).
+
+3. MAIN SUCCESS SCENARIO:
+- SURVEYING THE LANDSCAPE: The Planner opens the Grid View and scans the "Blue" zone (left side). These are neighbourhoods with low Sustainable Mode % (car-centric).
+- FILTERING FOR NEED: The Planner observes the top-left quadrant—neighbourhoods like Athlone (An). These areas are affordable (Top) but lack transit usage (Left).
+- DEEP-DIVE ANALYSIS: The Planner clicks on a cell. The Analysis Panel reveals high population counts, suggesting a high ROI for transit investment.
+- AI INSIGHT GENERATION: The Planner triggers Gemini AI. The AI highlights that while the area is an affordable entry point, its socio-economic standing is hampered by transit isolation.
+- REPORTING: The Planner takes a screenshot of the "Atomic Clustering" to show the Infrastructure Committee exactly where the equity gap exists.
+
+4. POST-CONDITION:
+The planning department has a visual "Heatmap" of equity gaps, allowing them to justify a multi-million dollar transit expansion project using accessible, evidence-based visualization.

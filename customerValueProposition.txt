@@ -1,0 +1,28 @@
+CUSTOMER VALUE PROPOSITION: THE MUNICIPAL PERIODIC DATA ENGINE
+
+FOR: Political Representatives (City Councilors), Urban Planners, and Public Service Executives.
+
+THE PROBLEM: DATA FRAGMENTATION
+Municipal data is often siloed in massive, unreadable spreadsheets. Leaders are required to make high-stakes decisions about transit, housing, and social services without an intuitive way to see how neighbourhoods compare across the entire city. Spotting a "Transit Desert" in an "Affordable Zone" currently requires hours of manual cross-referencing.
+
+THE SOLUTION: ATOMIC URBANISM
+The Edmonton Neighbourhood Periodic Table transforms raw Open Data into a high-density, interactive "Socio-Economic Map." By clustering neighbourhoods into a periodic grid based on Affordability (Vertical) and Sustainability (Horizontal), the platform reveals the "Chemical Identity" of every community at a single glance.
+
+KEY VALUE DRIVERS:
+
+1. VISUAL SYNTHESIS (THE "AT-A-GLANCE" FACTOR)
+   - Political representatives can find their specific wards via 2-letter atomic symbols.
+   - Stakeholders can instantly see city-wide clusters: "Car-Dependent Affordable" (Top-Left) vs. "Sustainable Premium" (Bottom-Right).
+
+2. AI-ENHANCED DECISION SUPPORT
+   - Integrated Gemini AI translates dry statistics into "Investment Verdicts." 
+   - Provides a professional narrative summary for briefings, saving hours of data interpretation for public service employees.
+
+3. EQUITABLE PLANNING TOOLS
+   - Identifying infrastructure gaps is no longer a manual task. The grid naturally highlights outliers—neighbourhoods that are affordable but isolated from transit—enabling evidence-based advocacy for marginalized areas.
+
+4. MUNICIPAL DEPLOYMENT VERSATILITY
+   - The platform is built on a "Data-Agnostic Engine." Any municipality can map their own CSV data to our standard schema to deploy a local version of the periodic table in minutes.
+
+THE BOTTOM LINE:
+We move municipal discourse from "What do the numbers say?" to "What does the city need?" The Periodic Data Engine turns urban statistics into a narrative of equity, allowing leaders to build a more sustainable and affordable city with scientific precision.

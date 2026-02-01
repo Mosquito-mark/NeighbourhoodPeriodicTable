@@ -23,8 +23,11 @@ export const COLOR_SCALE = [
   '#d7191c'  // Warm (Red)
 ];
 
+// CSV Header Template for external municipalities
+export const CSV_TEMPLATE_HEADER = `ID,Ward Name,Neighbourhood,Type,Population,Households,Median Income,Median Home Price,Sustainable Mode %,Affordabliiy Ratio`;
+
 // CSV Header: ID, Ward Name, Neighbourhood, Type, Population, Households, Median Income, Median Home Price, Sustainable Mode %, Affordabliiy Ratio
-export const RAW_CSV_DATA = `ID,Ward Name,Neighbourhood,Type,Population,Households,Median Income,Median Home Price,Sustainable Mode %,Affordabliiy Ratio
+export const RAW_CSV_DATA = `${CSV_TEMPLATE_HEADER}
 An,Anirniq,Athlone,Residential,"3,240","1,410","78,500","365,000",14.7,4.6
 An,Anirniq,Baranow,Residential,"1,200",700,"72,000","240,000",18.5,3.3
 An,Anirniq,Baturyn,Residential,"4,800","1,750","94,000","410,000",12.4,4.4

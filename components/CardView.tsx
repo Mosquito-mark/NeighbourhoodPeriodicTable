@@ -10,8 +10,9 @@ interface Props {
 }
 
 /**
- * CardView provides a mobile-optimized vertical list of neighbourhood cells.
- * Sort toolbar is now managed by the parent header in App.tsx.
+ * CardView provides a mobile-optimized view of neighbourhood cells.
+ * Configured specifically to show cards at 45% width on mobile, 
+ * creating a clean 2-column layout with consistent gutters.
  */
 const CardView: React.FC<Props> = ({ neighbourhoods, onSelect, selectedId }) => {
   if (neighbourhoods.length === 0) {
@@ -24,9 +25,9 @@ const CardView: React.FC<Props> = ({ neighbourhoods, onSelect, selectedId }) => 
   }
 
   return (
-    <div className="flex flex-col gap-6 pb-20 mt-4">
+    <div className="flex flex-wrap justify-between gap-y-6 md:grid md:grid-cols-3 md:gap-6 pb-24 mt-2 px-[2.5%]">
       {neighbourhoods.map((n) => (
-        <div key={n.id} className="relative group">
+        <div key={n.id} className="w-[47.5%] md:w-auto relative">
           <NeighbourhoodCell 
             neighbourhood={n} 
             onClick={onSelect} 
