@@ -34,13 +34,13 @@ const ListView: React.FC<Props> = ({ neighbourhoods, onSelect, selectedId, sortC
     return (
       <div className="flex flex-col items-center justify-center py-20 text-slate-400">
         <i className="fa-solid fa-magnifying-glass text-4xl mb-4 opacity-40"></i>
-        <p className="text-base font-black uppercase tracking-widest">No neighbourhoods found</p>
+        <p className="text-lg font-black uppercase tracking-widest">No neighbourhoods found</p>
       </div>
     );
   }
 
   const SortHeader = ({ label, sortKey, align = 'left' }: { label: string, sortKey: SortKey, align?: 'left' | 'right' }) => (
-    <th className={`px-6 py-4 text-base font-black text-slate-100 uppercase tracking-widest ${align === 'right' ? 'text-right' : 'text-left'}`}>
+    <th className={`px-6 py-5 text-base lg:text-xl font-black text-slate-100 uppercase tracking-widest ${align === 'right' ? 'text-right' : 'text-left'}`}>
       <button 
         onClick={() => onSort(sortKey)}
         className={`inline-flex items-center gap-2 hover:text-blue-400 transition-colors group ${align === 'right' ? 'flex-row-reverse' : 'flex-row'}`}
@@ -62,7 +62,7 @@ const ListView: React.FC<Props> = ({ neighbourhoods, onSelect, selectedId, sortC
             <SortHeader label="Sym" sortKey="symbol" />
             <SortHeader label="Neighbourhood" sortKey="name" />
             <SortHeader label="Ward" sortKey="ward" />
-            <SortHeader label="Income" sortKey="medianIncome" align="right" />
+            <SortHeader label="Household Income" sortKey="medianIncome" align="right" />
             <SortHeader label="Home Price" sortKey="medianHomePrice" align="right" />
             <SortHeader label="Affordability" sortKey="affordabilityRatio" align="right" />
             <SortHeader label="Sustainable" sortKey="sustainableModePct" align="right" />
@@ -84,34 +84,34 @@ const ListView: React.FC<Props> = ({ neighbourhoods, onSelect, selectedId, sortC
                 className={`group cursor-pointer transition-all duration-150 relative ${isSelected ? 'ring-inset ring-4 ring-blue-500 z-10' : 'hover:brightness-110'}`}
               >
                 <td className="px-6 py-6">
-                  <span className={`inline-flex items-center justify-center w-12 h-12 rounded text-xl font-black border transition-colors ${isLight ? 'bg-white/30 border-black/10' : 'bg-black/20 border-white/10'} ${textColor}`}>
+                  <span className={`inline-flex items-center justify-center w-14 h-14 rounded text-2xl font-black border transition-colors ${isLight ? 'bg-white/30 border-black/10' : 'bg-black/20 border-white/10'} ${textColor}`}>
                     {n.symbol}
                   </span>
                 </td>
                 <td className="px-6 py-6">
-                  <div className={`text-base font-black uppercase tracking-tight ${textColor}`}>{n.name}</div>
-                  <div className={`text-base font-bold uppercase tracking-wider ${mutedColor}`}>{n.type}</div>
+                  <div className={`text-lg lg:text-2xl font-black uppercase tracking-tight ${textColor}`}>{n.name}</div>
+                  <div className={`text-sm lg:text-lg font-bold uppercase tracking-wider ${mutedColor}`}>{n.type}</div>
                 </td>
                 <td className="px-6 py-6">
-                  <span className={`text-base font-bold ${textColor}`}>{n.ward}</span>
+                  <span className={`text-base lg:text-2xl font-bold ${textColor}`}>{n.ward}</span>
                 </td>
                 <td className="px-6 py-6 text-right">
-                  <span className={`text-base font-mono font-bold ${textColor}`}>${n.medianIncome.toLocaleString()}</span>
+                  <span className={`text-base lg:text-2xl font-mono font-bold ${textColor}`}>${n.medianIncome.toLocaleString()}</span>
                 </td>
                 <td className="px-6 py-6 text-right">
-                  <span className={`text-base font-mono font-bold ${textColor}`}>${n.medianHomePrice.toLocaleString()}</span>
+                  <span className={`text-base lg:text-2xl font-mono font-bold ${textColor}`}>${n.medianHomePrice.toLocaleString()}</span>
                 </td>
                 <td className="px-6 py-6 text-right">
-                  <span className={`text-base font-black ${isLight ? (n.affordabilityRatio > 6 ? 'text-red-700' : 'text-emerald-800') : (n.affordabilityRatio > 6 ? 'text-red-300' : 'text-emerald-400')}`}>
+                  <span className={`text-lg lg:text-3xl font-black ${isLight ? (n.affordabilityRatio > 6 ? 'text-red-700' : 'text-emerald-800') : (n.affordabilityRatio > 6 ? 'text-red-300' : 'text-emerald-400')}`}>
                     {n.affordabilityRatio.toFixed(2)}
                   </span>
                 </td>
                 <td className="px-6 py-6 text-right">
-                  <div className="flex items-center justify-end gap-3">
-                     <div className={`w-24 h-3 rounded-full overflow-hidden border ${isLight ? 'bg-black/10 border-black/10' : 'bg-white/10 border-white/10'}`}>
+                  <div className="flex items-center justify-end gap-4">
+                     <div className={`w-40 h-5 rounded-full overflow-hidden border ${isLight ? 'bg-black/10 border-black/10' : 'bg-white/10 border-white/10'}`}>
                        <div className={`h-full ${isLight ? 'bg-slate-900' : 'bg-white'}`} style={{ width: `${n.sustainableModePct}%` }} />
                      </div>
-                     <span className={`text-base font-black w-10 ${textColor}`}>{Math.round(n.sustainableModePct)}%</span>
+                     <span className={`text-base lg:text-2xl font-black w-16 ${textColor}`}>{Math.round(n.sustainableModePct)}%</span>
                   </div>
                 </td>
               </tr>

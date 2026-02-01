@@ -12,17 +12,24 @@ const AnalysisPanel: React.FC<Props> = ({ neighbourhood, onClose }) => {
   const [analysis, setAnalysis] = useState<AnalysisResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isQuotaError, setIsQuotaError] = useState(false);
 
   useEffect(() => {
     if (neighbourhood) {
       setLoading(true);
       setError(null);
       setAnalysis(null);
+      setIsQuotaError(false);
+      
       analyzeNeighbourhood(neighbourhood)
         .then(res => setAnalysis(res))
         .catch(err => {
-          console.error(err);
-          setError("Failed to generate AI analysis. Please check your API configuration.");
+          if (err.message === "QUOTA_EXHAUSTED") {
+            setIsQuotaError(true);
+            setError("The AI analysis quota has been reached for the moment. Please try again in a minute.");
+          } else {
+            setError("Failed to generate AI analysis. Please check your connection or try again later.");
+          }
         })
         .finally(() => setLoading(false));
     }
@@ -71,8 +78,11 @@ const AnalysisPanel: React.FC<Props> = ({ neighbourhood, onClose }) => {
               <div className="h-10 bg-slate-900 rounded animate-pulse w-10/12"></div>
             </div>
           ) : error ? (
-            <div className="p-6 bg-red-950/30 border border-red-900/30 rounded-xl text-red-200 text-base italic leading-relaxed">
-              {error}
+            <div className={`p-6 border rounded-xl text-base italic leading-relaxed ${isQuotaError ? 'bg-amber-950/30 border-amber-900/30 text-amber-200' : 'bg-red-950/30 border-red-900/30 text-red-200'}`}>
+              <div className="flex gap-3 items-start">
+                <i className={`fa-solid ${isQuotaError ? 'fa-hourglass-half' : 'fa-circle-exclamation'} mt-1`}></i>
+                <span>{error}</span>
+              </div>
             </div>
           ) : analysis ? (
             <div className="space-y-10">
@@ -109,13 +119,6 @@ const AnalysisPanel: React.FC<Props> = ({ neighbourhood, onClose }) => {
           Always verify current real estate data locally.
         </p>
       </div>
-      
-      <style dangerouslySetInnerHTML={{ __html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
-      `}} />
     </div>
   );
 };

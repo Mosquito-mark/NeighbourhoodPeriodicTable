@@ -6,6 +6,8 @@ import NeighbourhoodCell from './components/NeighbourhoodCell';
 import ListView from './components/ListView';
 import CardView from './components/CardView';
 import AnalysisPanel from './components/AnalysisPanel';
+import FAQOverlay from './components/FAQOverlay';
+import SortToolbar from './components/SortToolbar';
 import { COLOR_SCALE } from './constants';
 
 export type SortKey = 'name' | 'ward' | 'medianIncome' | 'medianHomePrice' | 'affordabilityRatio' | 'sustainableModePct' | 'symbol';
@@ -32,6 +34,7 @@ const App: React.FC = () => {
   const [zoom, setZoom] = useState(1);
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'name', direction: 'asc' });
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isFAQOpen, setIsFAQOpen] = useState(false);
   
   const mainScrollRef = useRef<HTMLElement>(null);
   const mousePos = useRef({ x: 0, y: 0 });
@@ -264,6 +267,14 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex flex-col md:flex-row items-center gap-4 flex-1 justify-end">
+            <button 
+              onClick={() => setIsFAQOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-full border border-slate-700 text-slate-200 hover:text-white transition-all group"
+            >
+              <i className="fa-solid fa-circle-question text-blue-400 group-hover:scale-110 transition-transform"></i>
+              <span className="text-xs font-black uppercase tracking-widest">How to read</span>
+            </button>
+
             {viewMode !== 'cards' && (
               <div className="hidden md:flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Zoom</span>
@@ -297,6 +308,11 @@ const App: React.FC = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+
+            {/* Mobile Sort Navigation: Just under the search bar */}
+            {viewMode === 'cards' && (
+              <SortToolbar sortConfig={sortConfig} onSort={handleSort} />
+            )}
           </div>
         </div>
       </header>
@@ -343,8 +359,6 @@ const App: React.FC = () => {
                 neighbourhoods={sortedNeighbourhoods}
                 onSelect={setSelectedNeighbourhood}
                 selectedId={selectedNeighbourhood?.id}
-                sortConfig={sortConfig}
-                onSort={handleSort}
               />
             </div>
           )}
@@ -368,6 +382,7 @@ const App: React.FC = () => {
       )}
 
       <AnalysisPanel neighbourhood={selectedNeighbourhood} onClose={() => setSelectedNeighbourhood(null)} />
+      <FAQOverlay isOpen={isFAQOpen} onClose={() => setIsFAQOpen(false)} />
 
       <footer className="p-4 bg-slate-900 border-t border-slate-800 text-center relative z-40">
         <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
@@ -380,8 +395,6 @@ const App: React.FC = () => {
           from { position: fixed; top: var(--source-y); left: var(--source-x); width: var(--source-w); height: var(--source-h); opacity: 0; transform: scale(0.8); }
           to { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1); width: 18vw; height: auto; opacity: 1; }
         }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
     </div>
   );
