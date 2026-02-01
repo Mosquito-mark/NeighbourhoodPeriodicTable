@@ -1,0 +1,5 @@
+{
+  "name": "Edmonton Neighbourhood Periodic Table",
+  "description": "An interactive data visualization application that organizes Edmonton's neighbourhoods into a periodic table layout based on affordability and income metrics, featuring AI-powered neighbourhood analysis.",
+  "requestFramePermissions": []
+}
