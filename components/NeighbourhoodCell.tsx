@@ -68,11 +68,11 @@ const NeighbourhoodCell: React.FC<Props> = ({
       aria-label={`${neighbourhood.name} neighbourhood details`}
       disabled={isStatic}
     >
-      {/* 1. Header Row: Population Metrics (Type 'RES' removed) */}
+      {/* 1. Header Row: Population Metrics */}
       <div className={`flex justify-end items-start text-[8.5cqw] font-black ${textColor} uppercase tracking-tight leading-none h-[15%]`}>
         <div className="text-right flex flex-col items-end">
-          <span className="whitespace-nowrap">Population: {neighbourhood.population.toLocaleString()}</span>
-          <span className="whitespace-nowrap">Households: {neighbourhood.households.toLocaleString()}</span>
+          <span className="whitespace-nowrap">Pop: {neighbourhood.population.toLocaleString()}</span>
+          <span className="whitespace-nowrap">HH: {neighbourhood.households.toLocaleString()}</span>
         </div>
       </div>
 
@@ -101,11 +101,11 @@ const NeighbourhoodCell: React.FC<Props> = ({
           <span className={`text-[7cqw] ${mutedTextColor} font-black uppercase tracking-widest`}>Ratio</span>
         </div>
         <div className="flex flex-col text-right leading-[1.1]">
-          <span className={`text-[9cqw] ${textColor} font-bold whitespace-nowrap`}>
-            ${Math.round(neighbourhood.medianIncome / 1000)}K
+          <span className={`text-[11cqw] ${textColor} font-bold whitespace-nowrap`}>
+            HHI: ${Math.round(neighbourhood.medianIncome / 1000)}K
           </span>
-          <span className={`text-[9cqw] ${textColor} font-bold whitespace-nowrap`}>
-            ${Math.round(neighbourhood.medianHomePrice / 1000)}K
+          <span className={`text-[11cqw] ${textColor} font-bold whitespace-nowrap`}>
+            HP: ${Math.round(neighbourhood.medianHomePrice / 1000)}K
           </span>
         </div>
       </div>
