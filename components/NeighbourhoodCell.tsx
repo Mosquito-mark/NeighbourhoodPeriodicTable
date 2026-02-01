@@ -93,21 +93,31 @@ const NeighbourhoodCell: React.FC<Props> = ({
       </div>
 
       {/* 3. Footer Block: Affordability and Pricing */}
-      <div className="mt-auto pt-[4%] border-t border-current/10 flex items-end justify-between">
-        <div className="flex flex-col items-start">
-          <span className={`text-[18cqw] font-black ${textColor} leading-none`}>
-            {neighbourhood.affordabilityRatio.toFixed(1)}
-          </span>
-          <span className={`text-[7cqw] ${mutedTextColor} font-black uppercase tracking-widest`}>Ratio</span>
+      <div className="mt-auto pt-[4%] border-t border-current/10">
+        <div className="flex items-center justify-between relative">
+          {/* Left Side: Ratio Group */}
+          <div className="relative">
+            <span className={`text-[18cqw] font-black ${textColor} leading-none`}>
+              {neighbourhood.affordabilityRatio.toFixed(1)}
+            </span>
+            {/* Absolute positioning ensures 'Ratio' doesn't affect the vertical centering of the numbers */}
+            <div className={`absolute -bottom-[45%] left-0 text-[7cqw] ${mutedTextColor} font-black uppercase tracking-widest whitespace-nowrap`}>
+              Ratio
+            </div>
+          </div>
+
+          {/* Right Side: Pricing Stack - Centered against the Ratio Number */}
+          <div className="flex flex-col text-right leading-[1.1] justify-center">
+            <span className={`text-[11cqw] ${textColor} font-bold whitespace-nowrap`}>
+              ${Math.round(neighbourhood.medianIncome / 1000)}K
+            </span>
+            <span className={`text-[11cqw] ${textColor} font-bold whitespace-nowrap`}>
+              ${Math.round(neighbourhood.medianHomePrice / 1000)}K
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col text-right leading-[1.1]">
-          <span className={`text-[11cqw] ${textColor} font-bold whitespace-nowrap`}>
-            HHI: ${Math.round(neighbourhood.medianIncome / 1000)}K
-          </span>
-          <span className={`text-[11cqw] ${textColor} font-bold whitespace-nowrap`}>
-            HP: ${Math.round(neighbourhood.medianHomePrice / 1000)}K
-          </span>
-        </div>
+        {/* Bottom spacer to account for the absolute 'Ratio' label */}
+        <div className="h-[4cqw]"></div>
       </div>
 
       {/* Selection Indicator Dot */}
