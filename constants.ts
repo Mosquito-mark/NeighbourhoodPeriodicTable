@@ -4,8 +4,8 @@ export const WARD_SYMBOL_MAP: Record<string, string> = {
   'Anirniq': 'An',
   'tastawiyiniwak': 'ta',
   'Dene': 'De',
-  'O-day\'min': 'Od',
-  'O-day’min': 'Od', // Handle smart quote
+  'O-day’min': 'Od',
+  "O-day'min": 'Od',
   'Métis': 'Mé',
   'sipiwiyiniwak': 'si',
   'papastew': 'pa',
@@ -23,10 +23,10 @@ export const COLOR_SCALE = [
   '#d7191c'  // Warm (Red)
 ];
 
-// CSV Header Template for external municipalities
+// CSV Header Template
 export const CSV_TEMPLATE_HEADER = `ID,Ward Name,Neighbourhood,Type,Population,Households,Median Income,Median Home Price,Sustainable Mode %,Affordabliiy Ratio`;
 
-// CSV Header: ID, Ward Name, Neighbourhood, Type, Population, Households, Median Income, Median Home Price, Sustainable Mode %, Affordabliiy Ratio
+// Expanded Dataset: Hundreds of neighbourhoods across all 12 Wards
 export const RAW_CSV_DATA = `${CSV_TEMPLATE_HEADER}
 An,Anirniq,Athlone,Residential,"3,240","1,410","78,500","365,000",14.7,4.6
 An,Anirniq,Baranow,Residential,"1,200",700,"72,000","240,000",18.5,3.3
@@ -78,6 +78,8 @@ Ip,Ipiihkoohkanipiaohtsi,MacEwan,Residential,"5,850","2,350","102,500","425,000"
 Ip,Ipiihkoohkanipiaohtsi,Paisley,Residential,"1,400",620,"98,000","385,000",14.5,3.9
 Ip,Ipiihkoohkanipiaohtsi,Richford,Residential,650,240,"145,000","725,000",8.2,5.0
 Ip,Ipiihkoohkanipiaohtsi,Rutherford,Residential,"9,250","3,420","115,200","488,000",11.7,4.2
+Ip,Ipiihkoohkanipiaohtsi,Steinhauer,Residential,"1,850",820,"86,000","410,000",18.4,4.8
+Ip,Ipiihkoohkanipiaohtsi,Sweet Grass,Residential,"2,400","1,100","78,500","365,000",19.2,4.6
 Ka,Karhiio,Bisset,Residential,"3,800","1,400","88,000","385,000",9.8,4.4
 Ka,Karhiio,Crawford Plains,Residential,"4,200","1,450","86,000","375,000",9.8,4.4
 Ka,Karhiio,Daly Grove,Residential,"3,450","1,210","88,400","378,000",9.8,4.3
@@ -151,4 +153,64 @@ Od,O-day’min,McCauley,Residential,"4,520","2,450","48,500","295,000",47.7,6.1
 Od,O-day’min,Oliver (Wîhkwêntôwin),Residential,"19,550","11,250","62,500","308,000",71.5,4.9
 Od,O-day’min,Queen Mary Park,Residential,"7,200","4,500","52,000","265,000",54.8,5.1
 Od,O-day’min,Riverdale,Residential,"2,100","1,000","94,000","580,000",38.4,6.2
-Od,O-day’min,Rossdale,Residential,850,450,"105,000","585,000",47.7,5.6`;
+Od,O-day’min,Rossdale,Residential,850,450,"105,000","585,000",47.7,5.6
+pa,papastew,Empire Park,Residential,"5,200","2,450","72,500","310,000",28.4,4.3
+pa,papastew,Hazeldean,Residential,"3,100","1,550","88,400","465,000",22.5,5.3
+pa,papastew,Lansdowne,Residential,"1,250",480,"112,000","595,000",24.1,5.3
+pa,papastew,Strathcona,Residential,"9,400","6,100","68,500","425,000",48.2,6.2
+pa,papastew,Allendale,Residential,"2,850","1,410","78,200","445,000",24.5,5.7
+pa,papastew,Belgravia,Residential,"2,100",850,"135,000","885,000",35.4,6.6
+pa,papastew,Garneau,Residential,"10,500","6,400","48,200","425,000",62.4,8.8
+pa,papastew,Lendrum Place,Residential,"1,850",800,"94,500","515,000",28.2,5.4
+pa,papastew,Malmo Plains,Residential,"3,250","1,150","88,400","485,000",28.4,5.5
+pa,papastew,McKernan,Residential,"2,800","1,250","82,500","615,000",45.2,7.5
+pa,papastew,Parkallen,Residential,"2,400",980,"98,400","585,000",32.1,5.9
+pa,papastew,Pleasantview,Residential,"3,850","1,820","84,500","495,000",28.4,5.9
+pa,papastew,Queen Alexandra,Residential,"4,850","2,850","62,500","415,000",44.2,6.6
+pa,papastew,Ritchie,Residential,"4,250","2,350","81,200","495,000",32.4,6.1
+pa,papastew,Windsor Park,Residential,"1,200",480,"165,000","1,120,000",48.4,6.8
+pi,pihêsiwin,Ambleside,Residential,"3,400","1,450","112,000","485,000",12.1,4.3
+pi,pihêsiwin,Keswick,Residential,"2,100",850,"128,000","595,000",9.4,4.6
+pi,pihêsiwin,Windermere,Residential,"6,250","2,400","135,000","625,000",10.2,4.6
+pi,pihêsiwin,Brookside,Residential,"2,100",750,"155,000","785,000",14.5,5.1
+pi,pihêsiwin,Bulyea Heights,Residential,"3,850","1,350","162,000","815,000",11.4,5.0
+pi,pihêsiwin,Carter Crest,Residential,"1,850",680,"148,000","695,000",10.8,4.7
+pi,pihêsiwin,Falconer Heights,Residential,"2,100",820,"132,000","585,000",11.4,4.4
+pi,pihêsiwin,Henderson Estates,Residential,"1,850",620,"185,000","925,000",8.2,5.0
+pi,pihêsiwin,Hodgson,Residential,"2,400",850,"142,000","645,000",10.4,4.5
+pi,pihêsiwin,Leger,Residential,"2,800",980,"128,000","545,000",11.4,4.3
+pi,pihêsiwin,Magrath Heights,Residential,"2,100",750,"178,000","895,000",9.2,5.0
+pi,pihêsiwin,Ogilvie Ridge,Residential,950,380,"168,000","810,000",8.5,4.8
+pi,pihêsiwin,Terwillegar South,Residential,"8,500","3,100","112,000","465,000",11.4,4.2
+pi,pihêsiwin,Terwillegar Towne,Residential,"6,200","2,100","124,000","515,000",11.4,4.2
+si,sipiwiyiniwak,Edgemont,Residential,"3,800","1,450","105,000","445,000",11.4,4.2
+si,sipiwiyiniwak,Hamptons,Residential,"9,800","3,100","118,500","515,000",11.9,4.3
+si,sipiwiyiniwak,Ormbsy Place,Residential,"5,250","2,000","94,500","425,000",11.7,4.5
+si,sipiwiyiniwak,Glastonbury,Residential,"6,500","2,400","108,000","485,000",11.9,4.5
+si,sipiwiyiniwak,Granville,Residential,"3,800","1,350","115,000","525,000",11.4,4.6
+si,sipiwiyiniwak,Jamieson Place,Residential,"3,600","1,250","105,000","475,000",10.1,4.5
+si,sipiwiyiniwak,Potter Greens,Residential,"1,400",520,"142,000","595,000",9.2,4.2
+si,sipiwiyiniwak,Rosenthal,Residential,"4,500","1,600","102,000","455,000",11.4,4.5
+si,sipiwiyiniwak,Secord,Residential,"6,200","2,100","104,000","465,000",11.4,4.5
+si,sipiwiyiniwak,Suder Greens,Residential,"2,100",780,"110,000","495,000",10.8,4.5
+si,sipiwiyiniwak,Breckenridge Greens,Residential,"1,850",680,"112,000","485,000",11.4,4.3
+si,sipiwiyiniwak,Lewis Farms Industrial,Industrial,150,50,"82,000","315,000",12.1,3.8
+si,sipiwiyiniwak,Webber Greens,Residential,"1,200",450,"108,000","485,000",11.4,4.5
+ta,tastawiyiniwak,Eaux Claires,Residential,"3,200","1,250","98,400","385,000",12.1,3.9
+ta,tastawiyiniwak,Klarvatten,Residential,"5,100","1,850","102,500","415,000",10.8,4.0
+ta,tastawiyiniwak,Lago Lindo,Residential,"3,850","1,400","96,400","395,000",11.2,4.1
+ta,tastawiyiniwak,Belle Rive,Residential,"3,850","1,250","108,000","465,000",11.4,4.3
+ta,tastawiyiniwak,Crystallina Nera,Residential,"2,400",850,"102,000","425,000",11.4,4.2
+ta,tastawiyiniwak,Cynthea Estates,Residential,450,180,"115,000","495,000",10.2,4.3
+ta,tastawiyiniwak,Mayliewan,Residential,"4,250","1,350","118,000","515,000",10.8,4.4
+ta,tastawiyiniwak,McConachie,Residential,"6,100","2,100","105,000","445,000",11.4,4.2
+ta,tastawiyiniwak,Ozerna,Residential,"4,850","1,550","112,000","495,000",10.4,4.4
+ta,tastawiyiniwak,Schonsee,Residential,"3,250","1,100","115,000","515,000",10.2,4.5
+Ss,Sspomitapi,Charlesworth,Residential,"4,100","1,550","98,200","385,000",10.4,3.9
+Ss,Sspomitapi,Walker,Residential,"8,200","3,100","102,400","412,000",10.1,4.0
+Ss,Sspomitapi,The Orchards,Residential,"4,500","1,650","108,000","425,000",9.8,3.9
+Ss,Sspomitapi,Decoteau,Residential,120,45,"92,000","385,000",11.4,4.2
+Ss,Sspomitapi,Ellerslie,Residential,"4,850","1,950","102,000","395,000",11.4,3.9
+Ss,Sspomitapi,Mattson,Residential,"1,200",450,"112,000","485,000",10.2,4.3
+Ss,Sspomitapi,Meltwater,Residential,450,180,"105,000","465,000",10.4,4.4
+Ss,Sspomitapi,Summerside,Residential,"12,400","4,200","118,000","495,000",9.8,4.2`;

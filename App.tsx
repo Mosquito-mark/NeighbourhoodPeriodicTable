@@ -1,14 +1,15 @@
 
 import React, { useState, useEffect, useMemo, useRef, useLayoutEffect } from 'react';
 import { Neighbourhood } from './types';
-import { fetchNeighbourhoods, parseNeighbourhoods, calculateStats } from './services/dataService';
+import { fetchNeighbourhoods, parseNeighbourhoods } from './services/dataService';
 import NeighbourhoodCell from './components/NeighbourhoodCell';
 import ListView from './components/ListView';
 import CardView from './components/CardView';
 import AnalysisPanel from './components/AnalysisPanel';
 import FAQOverlay from './components/FAQOverlay';
 import SortToolbar from './components/SortToolbar';
-import { COLOR_SCALE, RAW_CSV_DATA } from './constants';
+import WardFilter from './components/WardFilter';
+import { RAW_CSV_DATA } from './constants';
 
 export type SortKey = 'name' | 'ward' | 'medianIncome' | 'medianHomePrice' | 'affordabilityRatio' | 'sustainableModePct' | 'symbol';
 export type SortDirection = 'asc' | 'desc';
@@ -20,6 +21,7 @@ export interface SortConfig {
 
 /**
  * Main Application Component
+ * Manages global state for neighborhood data, filtering, and view modes.
  */
 const App: React.FC = () => {
   const [neighbourhoods, setNeighbourhoods] = useState<Neighbourhood[]>([]);
@@ -28,6 +30,7 @@ const App: React.FC = () => {
   const [hoveredNeighbourhood, setHoveredNeighbourhood] = useState<Neighbourhood | null>(null);
   const [hoveredRect, setHoveredRect] = useState<{ top: number, left: number, width: number, height: number } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedWard, setSelectedWard] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'cards'>('grid');
   const [zoom, setZoom] = useState(1);
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'name', direction: 'asc' });
@@ -37,9 +40,6 @@ const App: React.FC = () => {
   
   const mainScrollRef = useRef<HTMLElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const mousePos = useRef({ x: 0, y: 0 });
-  const scrollRequestRef = useRef<number | null>(null);
-  const touchState = useRef({ initialDist: 0, initialZoom: 1 });
 
   // Initial Data Fetch
   useEffect(() => {
@@ -55,6 +55,37 @@ const App: React.FC = () => {
     }
   }, []);
 
+  // --- DERIVED STATE ---
+  const uniqueWards = useMemo(() => {
+    // Standardize naming (e.g., smart quotes) during ward extraction to prevent duplicates
+    const rawWards = neighbourhoods.map(n => n.ward.replace(/'/g, '’'));
+    const wards: string[] = Array.from(new Set(rawWards));
+    return wards.sort((a, b) => a.localeCompare(b));
+  }, [neighbourhoods]);
+
+  const sortedNeighbourhoods = useMemo(() => {
+    const filtered = neighbourhoods.filter(n => {
+      // Normalize ward name for comparison
+      const normalizedWard = n.ward.replace(/'/g, '’');
+      const matchesSearch = n.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            normalizedWard.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesWard = !selectedWard || normalizedWard === selectedWard;
+      return matchesSearch && matchesWard;
+    });
+
+    return [...filtered].sort((a, b) => {
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      }
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+      return 0;
+    });
+  }, [neighbourhoods, searchQuery, selectedWard, sortConfig]);
+
   // --- DATA UPLOAD LOGIC ---
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -68,6 +99,7 @@ const App: React.FC = () => {
         if (parsed.length > 0) {
           setNeighbourhoods(parsed);
           setIsCustomData(true);
+          setSelectedWard(null); // Reset filters on new upload
           setUploadMessage(`Successfully loaded ${parsed.length} neighbourhoods.`);
           setTimeout(() => setUploadMessage(null), 5000);
         } else {
@@ -78,7 +110,6 @@ const App: React.FC = () => {
       }
     };
     reader.readAsText(file);
-    // Reset file input value so same file can be uploaded again if needed
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -86,6 +117,7 @@ const App: React.FC = () => {
     const data = parseNeighbourhoods(RAW_CSV_DATA);
     setNeighbourhoods(data);
     setIsCustomData(false);
+    setSelectedWard(null);
     setUploadMessage("Restored Edmonton Default Dataset.");
     setTimeout(() => setUploadMessage(null), 3000);
   };
@@ -125,32 +157,12 @@ const App: React.FC = () => {
     return () => window.removeEventListener('resize', handleFitToWidth);
   }, [viewMode]);
 
-  // --- SORTING LOGIC ---
   const handleSort = (key: SortKey) => {
     setSortConfig(prev => ({
       key,
       direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
     }));
   };
-
-  const sortedNeighbourhoods = useMemo(() => {
-    const filtered = neighbourhoods.filter(n => 
-      n.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      n.ward.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    return [...filtered].sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-      }
-      if (typeof aValue === 'number' && typeof bValue === 'number') {
-        return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue;
-      }
-      return 0;
-    });
-  }, [neighbourhoods, searchQuery, sortConfig]);
 
   // --- ZOOM & PAN LOGIC ---
   useEffect(() => {
@@ -167,14 +179,14 @@ const App: React.FC = () => {
       container.addEventListener('wheel', handleWheel, { passive: false });
     }
     return () => {
-      if (container) {
-        container.removeEventListener('wheel', handleWheel);
-      }
+      if (container) container.removeEventListener('wheel', handleWheel);
     };
   }, [zoom, viewMode]);
 
+  // --- GRID RENDER LOGIC ---
   const grid: (Neighbourhood | null)[][] = Array.from({ length: 9 }, () => Array.from({ length: 21 }, () => null));
   const filteredMap = new Set(sortedNeighbourhoods.map(n => n.id));
+  
   neighbourhoods.forEach(n => {
     if (filteredMap.has(n.id) && n.row >= 0 && n.row < 9 && n.col >= 0 && n.col < 21) {
       if (!grid[n.row][n.col]) grid[n.row][n.col] = n;
@@ -202,7 +214,6 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col text-slate-200 overflow-x-hidden">
-      {/* Hidden File Input */}
       <input 
         type="file" 
         ref={fileInputRef} 
@@ -227,7 +238,6 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex flex-col md:flex-row items-center gap-4 flex-1 justify-end">
-            {/* Upload Button */}
             <button 
               onClick={() => fileInputRef.current?.click()}
               className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/40 rounded-full border border-emerald-500/50 text-emerald-400 hover:text-emerald-300 transition-all group"
@@ -240,7 +250,6 @@ const App: React.FC = () => {
               <button 
                 onClick={handleResetData}
                 className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-full border border-slate-700 text-slate-400 hover:text-white transition-all group"
-                title="Restore Edmonton Dataset"
               >
                 <i className="fa-solid fa-rotate-left"></i>
                 <span className="text-xs font-black uppercase tracking-widest">Reset</span>
@@ -282,7 +291,13 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Success Notification */}
+      {/* Ward Filter Sub-Header */}
+      <WardFilter 
+        wards={uniqueWards} 
+        selectedWard={selectedWard} 
+        onWardSelect={setSelectedWard} 
+      />
+
       {uploadMessage && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-6 py-3 rounded-full shadow-2xl z-[60] font-black uppercase tracking-widest text-xs animate-in slide-in-from-top-4">
           <i className="fa-solid fa-check-circle mr-2"></i>
