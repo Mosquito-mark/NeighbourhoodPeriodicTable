@@ -57,7 +57,6 @@ const App: React.FC = () => {
 
   // --- DERIVED STATE ---
   const uniqueWards = useMemo(() => {
-    // Standardize naming (e.g., smart quotes) during ward extraction to prevent duplicates
     const rawWards = neighbourhoods.map(n => n.ward.replace(/'/g, '’'));
     const wards: string[] = Array.from(new Set(rawWards));
     return wards.sort((a, b) => a.localeCompare(b));
@@ -65,7 +64,6 @@ const App: React.FC = () => {
 
   const sortedNeighbourhoods = useMemo(() => {
     const filtered = neighbourhoods.filter(n => {
-      // Normalize ward name for comparison
       const normalizedWard = n.ward.replace(/'/g, '’');
       const matchesSearch = n.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                             normalizedWard.toLowerCase().includes(searchQuery.toLowerCase());
@@ -99,7 +97,7 @@ const App: React.FC = () => {
         if (parsed.length > 0) {
           setNeighbourhoods(parsed);
           setIsCustomData(true);
-          setSelectedWard(null); // Reset filters on new upload
+          setSelectedWard(null);
           setUploadMessage(`Successfully loaded ${parsed.length} neighbourhoods.`);
           setTimeout(() => setUploadMessage(null), 5000);
         } else {
@@ -164,7 +162,6 @@ const App: React.FC = () => {
     }));
   };
 
-  // --- ZOOM & PAN LOGIC ---
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       if ((e.ctrlKey || e.metaKey) && viewMode !== 'cards') {
@@ -183,7 +180,6 @@ const App: React.FC = () => {
     };
   }, [zoom, viewMode]);
 
-  // --- GRID RENDER LOGIC ---
   const grid: (Neighbourhood | null)[][] = Array.from({ length: 9 }, () => Array.from({ length: 21 }, () => null));
   const filteredMap = new Set(sortedNeighbourhoods.map(n => n.id));
   
@@ -233,36 +229,42 @@ const App: React.FC = () => {
               <h1 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter">
                 {isCustomData ? 'Municipal Grid' : 'Periodic Edmonton'}
               </h1>
-              <p className="text-slate-300 text-[10px] md:text-xs font-bold uppercase tracking-widest">Socio-Economic Engine</p>
+              <p className="text-slate-300 text-[10px] md:text-xs font-bold uppercase tracking-widest">Municipal Data-at-a-Glance</p>
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row items-center gap-4 flex-1 justify-end">
-            <button 
-              onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/40 rounded-full border border-emerald-500/50 text-emerald-400 hover:text-emerald-300 transition-all group"
-            >
-              <i className="fa-solid fa-file-csv text-lg"></i>
-              <span className="text-xs font-black uppercase tracking-widest">Load Municipal Data</span>
-            </button>
-
-            {isCustomData && (
+            
+            {/* Primary Action Buttons: Grouped on same line on mobile */}
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              {/* How to Read moved to the LEFT */}
               <button 
-                onClick={handleResetData}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-full border border-slate-700 text-slate-400 hover:text-white transition-all group"
+                onClick={() => setIsFAQOpen(true)}
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded-full border border-slate-700 text-slate-200 hover:text-white transition-all group"
               >
-                <i className="fa-solid fa-rotate-left"></i>
-                <span className="text-xs font-black uppercase tracking-widest">Reset</span>
+                <i className="fa-solid fa-circle-question text-blue-400 group-hover:scale-110 transition-transform"></i>
+                <span className="text-[9px] md:text-xs font-black uppercase tracking-widest whitespace-nowrap">How to Read</span>
               </button>
-            )}
 
-            <button 
-              onClick={() => setIsFAQOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-full border border-slate-700 text-slate-200 hover:text-white transition-all group"
-            >
-              <i className="fa-solid fa-circle-question text-blue-400 group-hover:scale-110 transition-transform"></i>
-              <span className="text-xs font-black uppercase tracking-widest">How to read</span>
-            </button>
+              {isCustomData && (
+                <button 
+                  onClick={handleResetData}
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded-full border border-slate-700 text-slate-400 hover:text-white transition-all group"
+                >
+                  <i className="fa-solid fa-rotate-left"></i>
+                  <span className="text-[9px] md:text-xs font-black uppercase tracking-widest">Reset</span>
+                </button>
+              )}
+
+              {/* Load Data moved to the RIGHT */}
+              <button 
+                onClick={() => fileInputRef.current?.click()}
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-emerald-600/20 hover:bg-emerald-600/40 rounded-full border border-emerald-500/50 text-emerald-400 hover:text-emerald-300 transition-all group"
+              >
+                <i className="fa-solid fa-file-csv text-base"></i>
+                <span className="text-[9px] md:text-xs font-black uppercase tracking-widest whitespace-nowrap">Load Data</span>
+              </button>
+            </div>
 
             <div className="flex bg-slate-800 p-1 rounded-lg border border-slate-700 w-full md:w-auto">
               {availableModes.map(mode => (
@@ -291,7 +293,6 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Ward Filter Sub-Header */}
       <WardFilter 
         wards={uniqueWards} 
         selectedWard={selectedWard} 
