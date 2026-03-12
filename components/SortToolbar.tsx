@@ -15,7 +15,7 @@ const SortToolbar: React.FC<Props> = ({ sortConfig, onSort }) => {
   const SortBtn = ({ label, sortKey }: { label: string, sortKey: SortKey }) => (
     <button 
       onClick={() => onSort(sortKey)}
-      className={`px-4 py-2 rounded-full border text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap
+      className={`flex-1 flex justify-center items-center px-1 py-2 rounded-full border text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap
         ${sortConfig.key === sortKey 
           ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/40' 
           : 'bg-slate-700 border-slate-600 text-slate-300 hover:text-white'
@@ -29,14 +29,12 @@ const SortToolbar: React.FC<Props> = ({ sortConfig, onSort }) => {
   );
 
   return (
-    <div className="w-full pt-2 border-t border-slate-800/50 mt-2 md:hidden">
-      <div className="flex overflow-x-auto gap-2 pb-1 no-scrollbar -mx-4 px-4">
-        <SortBtn label="Name" sortKey="name" />
-        <SortBtn label="Ward" sortKey="ward" />
+    <div className="w-full pt-2 border-t border-slate-800/50 mt-2">
+      <div className="flex w-full gap-2 pb-1">
         <SortBtn label="Income" sortKey="medianIncome" />
         <SortBtn label="Price" sortKey="medianHomePrice" />
         <SortBtn label="Afford" sortKey="affordabilityRatio" />
-        <SortBtn label="Green" sortKey="sustainableModePct" />
+        <SortBtn label="Active" sortKey="sustainableModePct" />
       </div>
     </div>
   );

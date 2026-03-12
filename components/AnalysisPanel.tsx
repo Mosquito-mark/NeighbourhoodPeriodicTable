@@ -57,11 +57,13 @@ const AnalysisPanel: React.FC<Props> = ({ neighbourhood, onClose }) => {
       {/* Content Section */}
       <div className="flex-1 overflow-y-auto p-6 space-y-10 custom-scrollbar">
         {/* Core Metrics Grid */}
-        <div className="grid grid-cols-1 gap-5">
-          <StatBox label="Affordability" value={neighbourhood.affordabilityRatio.toFixed(2)} sub="Ratio (HHI/HP)" icon="fa-hand-holding-dollar" />
-          <StatBox label="Sustainable" value={`${Math.round(neighbourhood.sustainableModePct)}%`} sub="Active Transit" icon="fa-bicycle" />
-          <StatBox label="Median HHI" value={`$${neighbourhood.medianIncome.toLocaleString()}`} sub="Household Income" icon="fa-wallet" />
-          <StatBox label="Median HP" value={`$${neighbourhood.medianHomePrice.toLocaleString()}`} sub="Home Price" icon="fa-house-chimney" />
+        <div className="grid grid-cols-2 gap-4">
+          <StatBox label="Population" value={neighbourhood.population.toLocaleString()} sub="Residents" icon="fa-users" />
+          <StatBox label="Households" value={neighbourhood.households.toLocaleString()} sub="Dwellings" icon="fa-house" />
+          <StatBox label="Afford" value={neighbourhood.affordabilityRatio.toFixed(2)} sub="Ratio (HHI/HP)" icon="fa-hand-holding-dollar" />
+          <StatBox label="Transit" value={`${Math.round(neighbourhood.sustainableModePct)}%`} sub="Active/Transit" icon="fa-bicycle" />
+          <StatBox label="Income" value={`$${(neighbourhood.medianIncome / 1000).toFixed(0)}k`} sub="Median HHI" icon="fa-wallet" />
+          <StatBox label="Home" value={`$${(neighbourhood.medianHomePrice / 1000).toFixed(0)}k`} sub="Median Price" icon="fa-house-chimney" />
         </div>
 
         {/* AI Insight Section */}
@@ -124,13 +126,15 @@ const AnalysisPanel: React.FC<Props> = ({ neighbourhood, onClose }) => {
 };
 
 const StatBox = ({ label, value, sub, icon }: { label: string, value: string, sub: string, icon: string }) => (
-  <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800/50 hover:border-slate-700 transition-colors group">
-    <div className="flex items-center gap-3 text-slate-400 mb-3 group-hover:text-blue-400 transition-colors">
-      <i className={`fa-solid ${icon} text-xl`}></i>
-      <span className="text-base font-black uppercase tracking-widest">{label}</span>
+  <div className="bg-slate-900/50 p-4 rounded-2xl border border-slate-800/50 hover:border-slate-700 transition-colors group flex flex-col justify-between">
+    <div className="flex items-center gap-2 text-slate-400 mb-2 group-hover:text-blue-400 transition-colors">
+      <i className={`fa-solid ${icon} text-lg`}></i>
+      <span className="text-xs md:text-sm font-black uppercase tracking-wider truncate">{label}</span>
     </div>
-    <div className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-1">{value}</div>
-    <div className="text-base text-slate-500 font-bold uppercase tracking-wide">{sub}</div>
+    <div>
+      <div className="text-2xl md:text-3xl font-black text-white tracking-tighter mb-1 truncate">{value}</div>
+      <div className="text-[10px] md:text-xs text-slate-500 font-bold uppercase tracking-wide truncate">{sub}</div>
+    </div>
   </div>
 );
 

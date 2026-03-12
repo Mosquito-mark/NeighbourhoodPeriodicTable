@@ -84,6 +84,17 @@ const App: React.FC = () => {
     });
   }, [neighbourhoods, searchQuery, selectedWard, sortConfig]);
 
+  const aggregateStats = useMemo(() => {
+    if (sortedNeighbourhoods.length === 0) return { avgIncome: 0, avgPrice: 0, totalPop: 0, totalHouseholds: 0 };
+    
+    const totalPop = sortedNeighbourhoods.reduce((sum, n) => sum + n.population, 0);
+    const totalHouseholds = sortedNeighbourhoods.reduce((sum, n) => sum + n.households, 0);
+    const avgIncome = sortedNeighbourhoods.reduce((sum, n) => sum + n.medianIncome, 0) / sortedNeighbourhoods.length;
+    const avgPrice = sortedNeighbourhoods.reduce((sum, n) => sum + n.medianHomePrice, 0) / sortedNeighbourhoods.length;
+    
+    return { totalPop, totalHouseholds, avgIncome, avgPrice };
+  }, [sortedNeighbourhoods]);
+
   // --- DATA UPLOAD LOGIC ---
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -297,6 +308,11 @@ const App: React.FC = () => {
         wards={uniqueWards} 
         selectedWard={selectedWard} 
         onWardSelect={setSelectedWard} 
+        totalDisplayed={sortedNeighbourhoods.length}
+        aggregateStats={aggregateStats}
+        sortConfig={sortConfig}
+        onSort={handleSort}
+        viewMode={viewMode}
       />
 
       {uploadMessage && (
@@ -306,9 +322,9 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <main ref={mainScrollRef} className="flex-1 overflow-auto p-4 md:p-10 select-none scroll-smooth relative">
+      <main ref={mainScrollRef} className="flex-1 overflow-auto p-4 md:p-6 select-none scroll-smooth relative">
         <div 
-          className={`max-w-max mx-auto relative transition-transform duration-150 ease-out transform-gpu ${viewMode === 'list' ? 'origin-top' : 'origin-top-left'}`}
+          className={`${viewMode === 'cards' ? 'w-full max-w-[1800px]' : 'max-w-max'} mx-auto relative transition-transform duration-150 ease-out transform-gpu ${viewMode === 'list' ? 'origin-top' : 'origin-top-left'}`}
           style={{ transform: viewMode === 'cards' ? 'none' : `scale(${zoom})` }}
         >
           {viewMode === 'grid' && (
@@ -343,11 +359,12 @@ const App: React.FC = () => {
           )}
 
           {viewMode === 'cards' && (
-            <div className="w-full max-w-[1000px] mx-auto">
+            <div className="w-full max-w-[1800px] mx-auto">
               <CardView 
                 neighbourhoods={sortedNeighbourhoods}
                 onSelect={setSelectedNeighbourhood}
                 selectedId={selectedNeighbourhood?.id}
+                aggregateStats={aggregateStats}
               />
             </div>
           )}

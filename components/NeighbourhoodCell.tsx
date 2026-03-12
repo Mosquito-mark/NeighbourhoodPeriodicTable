@@ -71,8 +71,8 @@ const NeighbourhoodCell: React.FC<Props> = ({
       {/* 1. Header Row: Population Metrics */}
       <div className={`flex justify-end items-start text-[9cqw] font-black ${textColor} uppercase tracking-tight leading-tight h-[15%]`}>
         <div className="text-right flex flex-col items-end opacity-80">
-          <span className="whitespace-nowrap">P: {neighbourhood.population >= 1000 ? (neighbourhood.population/1000).toFixed(1) + 'K' : neighbourhood.population}</span>
-          <span className="whitespace-nowrap">H: {neighbourhood.households >= 1000 ? (neighbourhood.households/1000).toFixed(1) + 'K' : neighbourhood.households}</span>
+          <span className="whitespace-nowrap">Pop: {neighbourhood.population >= 1000 ? (neighbourhood.population/1000).toFixed(1) + 'K' : neighbourhood.population}</span>
+          <span className="whitespace-nowrap">Households: {neighbourhood.households >= 1000 ? (neighbourhood.households/1000).toFixed(1) + 'K' : neighbourhood.households}</span>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ const NeighbourhoodCell: React.FC<Props> = ({
         </div>
         
         {/* Full Ward Name - Revealed on Rollover or always on in mobile contexts (static) */}
-        <div className={`text-[8cqw] font-bold ${mutedTextColor} uppercase tracking-widest text-left mb-[4%] transition-opacity duration-300 ease-out ${isStatic ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+        <div className={`text-[5.5cqw] font-bold ${mutedTextColor} uppercase tracking-wider text-left mb-[4%] transition-opacity duration-300 ease-out ${isStatic ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
           {neighbourhood.ward}
         </div>
 
@@ -107,11 +107,11 @@ const NeighbourhoodCell: React.FC<Props> = ({
 
           {/* Right Side: Pricing Stack */}
           <div className="flex flex-col text-right leading-[1.1] justify-center items-end">
-            <span className={`text-[12.5cqw] ${textColor} font-black whitespace-nowrap`}>
-              I:${Math.round(neighbourhood.medianIncome / 1000)}K
+            <span className={`text-[10cqw] ${textColor} font-black whitespace-nowrap tracking-tight`}>
+              HHI: ${Math.round(neighbourhood.medianIncome / 1000)}K
             </span>
-            <span className={`text-[12.5cqw] ${textColor} font-black whitespace-nowrap`}>
-              P:${Math.round(neighbourhood.medianHomePrice / 1000)}K
+            <span className={`text-[10cqw] ${textColor} font-black whitespace-nowrap tracking-tight`}>
+              HP: ${Math.round(neighbourhood.medianHomePrice / 1000)}K
             </span>
           </div>
         </div>

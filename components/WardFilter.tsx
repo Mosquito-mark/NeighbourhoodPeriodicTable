@@ -1,10 +1,21 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import { SortConfig, SortKey } from '../App';
 
 interface Props {
   wards: string[];
   selectedWard: string | null;
   onWardSelect: (ward: string | null) => void;
+  totalDisplayed: number;
+  aggregateStats?: {
+    totalPop: number;
+    totalHouseholds: number;
+    avgIncome: number;
+    avgPrice: number;
+  };
+  sortConfig?: SortConfig;
+  onSort?: (key: SortKey) => void;
+  viewMode?: 'grid' | 'list' | 'cards';
 }
 
 /**
@@ -13,7 +24,7 @@ interface Props {
  * Optimized for mobile: Stacks vertically on small screens to ensure the dropdown 
  * is left-aligned and fits perfectly within the viewport.
  */
-const WardFilter: React.FC<Props> = ({ wards, selectedWard, onWardSelect }) => {
+const WardFilter: React.FC<Props> = ({ wards, selectedWard, onWardSelect, totalDisplayed, aggregateStats, sortConfig, onSort, viewMode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -33,6 +44,25 @@ const WardFilter: React.FC<Props> = ({ wards, selectedWard, onWardSelect }) => {
   const handleSelect = (ward: string | null) => {
     onWardSelect(ward);
     setIsOpen(false);
+  };
+
+  const SortBtn = ({ label, sortKey }: { label: string, sortKey: SortKey }) => {
+    if (!sortConfig || !onSort) return null;
+    return (
+      <button 
+        onClick={() => onSort(sortKey)}
+        className={`flex justify-center items-center px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap
+          ${sortConfig.key === sortKey 
+            ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/40' 
+            : 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700'
+          }
+        `}
+      >
+        {label} {sortConfig.key === sortKey && (
+          <i className={`fa-solid ${sortConfig.direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down'} ml-1`}></i>
+        )}
+      </button>
+    );
   };
 
   return (
@@ -103,12 +133,50 @@ const WardFilter: React.FC<Props> = ({ wards, selectedWard, onWardSelect }) => {
         {selectedWard && (
           <button 
             onClick={() => handleSelect(null)}
-            className="self-start md:self-auto text-[9px] md:text-[10px] font-black text-slate-500 hover:text-red-400 uppercase tracking-widest flex items-center gap-1.5 transition-colors py-1"
+            className="self-start md:self-auto text-[9px] md:text-[10px] font-black text-slate-500 hover:text-red-400 uppercase tracking-widest flex items-center gap-1.5 transition-colors py-1 shrink-0"
           >
             <i className="fa-solid fa-circle-xmark"></i>
             Reset to City-Wide
           </button>
         )}
+
+        {/* Sort Pills (Tablet/Desktop only) */}
+        {viewMode === 'cards' && sortConfig && onSort && (
+          <div className="hidden md:flex items-center gap-2 ml-2 border-l border-slate-700/50 pl-4">
+            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mr-1">Sort:</span>
+            <SortBtn label="Income" sortKey="medianIncome" />
+            <SortBtn label="Price" sortKey="medianHomePrice" />
+            <SortBtn label="Afford" sortKey="affordabilityRatio" />
+            <SortBtn label="Active" sortKey="sustainableModePct" />
+          </div>
+        )}
+
+        {/* Total Displayed Count & Stats */}
+        <div className="ml-auto flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">
+            <span className="bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700 text-slate-200 shadow-sm" title="Total Neighbourhoods Displayed">
+              {totalDisplayed} <span className="hidden md:inline">Neighbourhood{totalDisplayed !== 1 ? 's' : ''}</span>
+              <span className="md:hidden">Nbhd{totalDisplayed !== 1 ? 's' : ''}</span>
+            </span>
+            
+            {aggregateStats && (
+              <>
+                <span className="bg-slate-800/60 px-2.5 py-1 rounded-md border border-slate-700/50" title="Average Median Household Income">
+                  Avg HHI: ${Math.round(aggregateStats.avgIncome / 1000)}K
+                </span>
+                <span className="bg-slate-800/60 px-2.5 py-1 rounded-md border border-slate-700/50" title="Average Median House Price">
+                  Avg HP: ${aggregateStats.avgPrice >= 1000000 ? (aggregateStats.avgPrice / 1000000).toFixed(1) + 'M' : Math.round(aggregateStats.avgPrice / 1000) + 'K'}
+                </span>
+                <span className="bg-slate-800/60 px-2.5 py-1 rounded-md border border-slate-700/50" title="Total Population">
+                  Pop: {aggregateStats.totalPop >= 1000 ? (aggregateStats.totalPop / 1000).toFixed(1) + 'K' : aggregateStats.totalPop}
+                </span>
+                <span className="bg-slate-800/60 px-2.5 py-1 rounded-md border border-slate-700/50" title="Total Households">
+                  HHs: {aggregateStats.totalHouseholds >= 1000 ? (aggregateStats.totalHouseholds / 1000).toFixed(1) + 'K' : aggregateStats.totalHouseholds}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
